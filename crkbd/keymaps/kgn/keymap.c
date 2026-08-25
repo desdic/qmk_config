@@ -34,6 +34,7 @@ enum custom_layers {MAIN, SYMRIGHT, SYMLEFT, NUMPAD, NAV, FUNC, SPECIAL};
 #define GUI_3 LGUI(KC_3)
 #define GUI_4 LGUI(KC_4)
 #define GUI_5 LGUI(KC_5)
+#define GUI_Z LGUI(KC_Z)
 
 #define AA RALT(KC_W)
 #define AE RALT(KC_Z)
@@ -43,7 +44,6 @@ enum custom_keycodes {
     CSE = SAFE_RANGE, // Ctrl+Space+Esc
     CSC,              // Ctrl+Shift+C
     CSV,              // Ctrl+Shift+V
-    MSZ,              // Meta+Shift+Z
 };
 
 static uint32_t last_input_time = 0;
@@ -78,10 +78,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case CSE:
             if (record->event.pressed) {
+                // 1. Send Ctrl + Esc
                 register_mods(MOD_BIT(KC_LCTL));
                 tap_code(KC_SPC);
-                tap_code(KC_ESC);
-                unregister_mods(MOD_BIT(KC_LCTL));
+                unregister_mods(MOD_BIT(KC_LCTL)); // Drop Ctrl before typing '['
+
+                wait_ms(20);
+
+                // 2. Tap literal '[' without Ctrl
+                tap_code(KC_LEFT_BRACKET);
             }
             return false;
 
@@ -102,16 +107,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_V);
                 unregister_mods(MOD_BIT(KC_LSFT));
                 unregister_mods(MOD_BIT(KC_LCTL));
-            }
-            return false;
-
-        case MSZ:
-            if (record->event.pressed) {
-                register_mods(MOD_BIT(KC_LGUI));
-                register_mods(MOD_BIT(KC_LSFT));
-                tap_code(KC_Z);
-                unregister_mods(MOD_BIT(KC_LSFT));
-                unregister_mods(MOD_BIT(KC_LGUI));
             }
             return false;
     }
@@ -182,7 +177,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // |----------------+----------------+----------------+----------------+----------------+----------------|                                      |----------------+----------------+----------------+----------------+----------------+----------------|
         KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,           KC_NO,                                                  KC_HOME,         KC_PGDN,         KC_PGUP,         KC_END,          KC_NO,           KC_NO,
     // |----------------+----------------+----------------+----------------+----------------+----------------|                                      |----------------+----------------+----------------+----------------+----------------+----------------|
-                                                           KC_TRNS,         KC_TRNS,         KC_TRNS,                                                MSZ,             KC_TRNS,         KC_TRNS           ),
+                                                           KC_TRNS,         KC_TRNS,         KC_TRNS,                                                GUI_Z,             KC_TRNS,         KC_TRNS           ),
     //                                                    +----------------+----------------+----------------|                                      |----------------+----------------+----------------|
 
     [FUNC] = LAYOUT_split_3x6_3_ex2(

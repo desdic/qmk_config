@@ -19,10 +19,14 @@
 
 #define CAPS_WORD_IDLE_TIMEOUT 5000 // turns off after 5s of inactivity
 
+#define RETRO_TAPPING
+// #define QUICK_TAP_TERM 0
+#define QUICK_TAP_TERM 120
+
 // Pick good defaults for enabling homerow modifiers
 #define TAPPING_TERM 175
-#define RETRO_TAPPING
-#define QUICK_TAP_TERM 0
 #define TAPPING_TERM_PER_KE
+#define CHORDAL_HOLD
+#define PERMISSIVE_HOLD
 
 #define RGB_DISABLE_TIMEOUT 300000
